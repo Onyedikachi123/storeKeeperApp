@@ -15,7 +15,10 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootTabParamList } from "../App";
 
-type AddProductNavProp = BottomTabNavigationProp<RootTabParamList, "AddProduct">;
+type AddProductNavProp = BottomTabNavigationProp<
+  RootTabParamList,
+  "AddProduct"
+>;
 
 const AddProductScreen = () => {
   const nav = useNavigation<AddProductNavProp>();
@@ -27,9 +30,13 @@ const AddProductScreen = () => {
 
   const handleImagePicker = async () => {
     if (Platform.OS !== "web") {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Permission required", "Access to media library is required.");
+        Alert.alert(
+          "Permission required",
+          "Access to media library is required."
+        );
         return;
       }
     }
@@ -44,6 +51,13 @@ const AddProductScreen = () => {
     if (!result.canceled && result.assets.length > 0) {
       setImageUri(result.assets[0].uri);
     }
+  };
+
+  const resetForm = () => {
+    setName("");
+    setQuantity("");
+    setPrice("");
+    setImageUri(undefined);
   };
 
   const handleSubmit = async () => {
@@ -66,7 +80,10 @@ const AddProductScreen = () => {
       Alert.alert("Success", "Product added successfully!", [
         {
           text: "OK",
-          onPress: () => nav.navigate("Home"),
+          onPress: () => {
+            resetForm(); // ✅ reset form
+            nav.navigate("Home");
+          },
         },
       ]);
     } catch (err) {
@@ -80,11 +97,28 @@ const AddProductScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Product Name</Text>
-      <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="e.g. Apple" />
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="e.g. Apple"
+      />
       <Text style={styles.label}>Quantity</Text>
-      <TextInput style={styles.input} value={quantity} onChangeText={setQuantity} keyboardType="numeric" placeholder="e.g. 10" />
+      <TextInput
+        style={styles.input}
+        value={quantity}
+        onChangeText={setQuantity}
+        keyboardType="numeric"
+        placeholder="e.g. 10"
+      />
       <Text style={styles.label}>Price</Text>
-      <TextInput style={styles.input} value={price} onChangeText={setPrice} keyboardType="numeric" placeholder="e.g. 9.99" />
+      <TextInput
+        style={styles.input}
+        value={price}
+        onChangeText={setPrice}
+        keyboardType="numeric"
+        placeholder="e.g. 9.99"
+      />
 
       <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
         <Text style={styles.imageButtonText}>Pick an image</Text>
@@ -92,7 +126,11 @@ const AddProductScreen = () => {
 
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
 
-      <TouchableOpacity style={[styles.addButton, saving && styles.addButtonDisabled]} onPress={handleSubmit} disabled={saving}>
+      <TouchableOpacity
+        style={[styles.addButton, saving && styles.addButtonDisabled]}
+        onPress={handleSubmit}
+        disabled={saving}
+      >
         <Text style={styles.addButtonText}>{saving ? "Adding..." : "Add"}</Text>
       </TouchableOpacity>
     </View>
@@ -103,10 +141,22 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   label: { marginVertical: 10, fontSize: 16 },
   input: { borderWidth: 1, borderColor: "#ccc", padding: 10, borderRadius: 5 },
-  imageButton: { marginVertical: 12, backgroundColor: "#007bff", padding: 10, borderRadius: 6, alignItems: "center" },
+  imageButton: {
+    marginVertical: 12,
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 6,
+    alignItems: "center",
+  },
   imageButtonText: { color: "#fff", fontWeight: "600" },
   image: { width: "100%", height: 200, marginVertical: 10, borderRadius: 6 },
-  addButton: { marginTop: 16, backgroundColor: "#28a745", paddingVertical: 14, borderRadius: 8, alignItems: "center" },
+  addButton: {
+    marginTop: 16,
+    backgroundColor: "#28a745",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+  },
   addButtonDisabled: { opacity: 0.7 },
   addButtonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
 });
