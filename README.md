@@ -10,6 +10,6 @@ StoreKeeper is a mobile application built with Expo that allows users to manage 
 4. Open the app in Expo Go or an emulator.
 
 ## Links
-- GitHub: [https://github.com/Onyedikachi123/storeKeeperApp.git)]
-- APK: [Your APK Link Here]
-- Demo Video: [Your Demo Video Link Here]
+- GitHub: [https://github.com/Onyedikachi123/storeKeeperApp.git]
+- APK: [https://appetize.io/app/b_snhyytpfsmb6h5a77sdl3rjcaq]
+- Demo Video: [https://drive.google.com/file/d/1dDpg1S3IB0RoOt6EDRevPuIa-sIyFuwX/view?usp=sharing]
