@@ -85,7 +85,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     {
       key: "value",
       label: "Total Value",
-      value: `$${totalValue.toFixed(2)}`,
+      value: `${totalValue.toFixed(2)}`,
       color: "#f59e0b", // yellow/orange
       icon: <FontAwesome5 name="dollar-sign" size={24} color="white" />,
     },

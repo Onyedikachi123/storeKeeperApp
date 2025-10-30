@@ -28,36 +28,58 @@ const AddProductScreen = () => {
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [saving, setSaving] = useState(false);
 
-  const handleImagePicker = async () => {
-    if (Platform.OS !== "web") {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission required",
-          "Access to media library is required."
-        );
-        return;
-      }
+ const handleImagePicker = async () => {
+  if (Platform.OS !== "web") {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission required",
+        "Access to media library is required."
+      );
+      return;
     }
+  }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
-    });
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 0.8,
+  });
 
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
+  // ✅ Updated to check result.assets
+  if (!result.canceled && result.assets && result.assets.length > 0) {
+    setImageUri(result.assets[0].uri);
+  }
+};
+
 
   const resetForm = () => {
     setName("");
     setQuantity("");
     setPrice("");
     setImageUri(undefined);
+  };
+
+  // ✅ handle camera capture correctly
+  const handleCameraCapture = async () => {
+    if (Platform.OS !== "web") {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission required", "Access to camera is required.");
+        return;
+      }
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri); // ✅ use the URI
+    }
   };
 
   const handleSubmit = async () => {
@@ -121,7 +143,14 @@ const AddProductScreen = () => {
       />
 
       <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
-        <Text style={styles.imageButtonText}>Pick an image</Text>
+        <Text style={styles.imageButtonText}>Pick from Gallery</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.imageButton}
+        onPress={handleCameraCapture}
+      >
+        <Text style={styles.imageButtonText}>Take a Photo</Text>
       </TouchableOpacity>
 
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
